@@ -201,24 +201,6 @@ exports.postDeleteAccount = (req, res, next) => {
 };
 
 /**
- * GET /account/unlink/:provider
- * Unlink OAuth provider.
- */
-exports.getOauthUnlink = (req, res, next) => {
-  const { provider } = req.params;
-  User.findById(req.user.id, (err, user) => {
-    if (err) { return next(err); }
-    user[provider] = undefined;
-    user.tokens = user.tokens.filter(token => token.kind !== provider);
-    user.save((err) => {
-      if (err) { return next(err); }
-      req.flash('info', { msg: `${provider} account has been unlinked.` });
-      res.redirect('/account');
-    });
-  });
-};
-
-/**
  * GET /reset/:token
  * Reset Password page.
  */
@@ -287,9 +269,9 @@ exports.postReset = (req, res, next) => {
     });
     const mailOptions = {
       to: user.email,
-      from: 'hackathon@starter.com',
-      subject: 'Your Hackathon Starter password has been changed',
-      text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
+      from: 'system.finansowy@bcyb.pl',
+      subject: 'Twoje hasło zostało zmienione',
+      text: `Cześć,\n\nTen email potwierdza zmianę hasła dla konta: ${user.email}.\n`
     };
     return transporter.sendMail(mailOptions)
       .then(() => {
@@ -360,7 +342,7 @@ exports.postForgot = (req, res, next) => {
     });
     const mailOptions = {
       to: user.email,
-      from: 'hackathon@starter.com',
+      from: 'system.finansowy@bcyb.pl',
       subject: 'Reset your password on Hackathon Starter',
       text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
         Please click on the following link, or paste this into your browser to complete the process:\n\n
