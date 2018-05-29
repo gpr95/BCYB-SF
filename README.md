@@ -17,3 +17,4 @@ When I started this project, my primary focus was on **simplicity** and **ease o
 I also tried to make it as **generic** and **reusable** as possible to cover most use cases of hackathon web apps,
 without being too specific. In the worst case you can use this as a learning guide for your projects,
 if for example you are only interested in **Sign in with Google** authentication and nothing else.
+
