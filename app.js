@@ -36,6 +36,9 @@ const contactController = require('./controllers/contact');
  */
 const app = express();
 
+var speakeasy = require('speakeasy');
+var QRCode = require('qrcode');
+
 dotenv.load({ path: '.env.example' });
 
 /**

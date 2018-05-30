@@ -6,6 +6,11 @@ const User = require('../models/User');
 
 const randomBytesAsync = promisify(crypto.randomBytes);
 
+var speakeasy = require('speakeasy');
+var QRCode = require('qrcode');
+
+var userSecret;
+
 /**
  * GET /login
  * Login page.
@@ -41,8 +46,21 @@ exports.postLogin = (req, res, next) => {
       req.flash('errors', info);
       return res.redirect('/login');
     }
+
+    if(user.twoFactorSecret != "") {
+      if(speakeasy.totp.verify({ secret: user.twoFactorSecret,
+        encoding: 'base32',
+        token: req.body.speakeasyCode })) {
+          req.flash('success', { msg: 'Success! Two factor authentication worked!.' });
+        } else {
+          req.flash('error', { msg: 'Error! Authentication code error!.' });
+          return res.redirect('/login');
+        }
+    }
+
     req.logIn(user, (err) => {
       if (err) { return next(err); }
+      if (user.twoFactorSecret == "") { req.flash('warning', { msg: 'Warning! Maybe use two factor authentication?.' }); }
       req.flash('success', { msg: 'Success! You are logged in.' });
       res.redirect(req.session.returnTo || '/');
     });
@@ -70,8 +88,18 @@ exports.getSignup = (req, res) => {
   if (req.user) {
     return res.redirect('/');
   }
-  res.render('account/signup', {
-    title: 'Create Account'
+
+  userSecret = speakeasy.generateSecret();
+  
+  console.log("========== DATA URL ==========");
+  console.log(userSecret.otpauth_url); 
+  
+  QRCode.toDataURL(userSecret.otpauth_url, function(err, data_url) {
+    console.log(data_url);
+    res.render('account/signup', {
+      title: 'Create Account',
+      qrimage: data_url
+    });
   });
 };
 
@@ -85,6 +113,8 @@ exports.postSignup = (req, res, next) => {
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
+  var userToken = req.body.speakeasyCode;
+
   const errors = req.validationErrors();
 
   if (errors) {
@@ -92,9 +122,20 @@ exports.postSignup = (req, res, next) => {
     return res.redirect('/signup');
   }
 
+  parsedSecret = userSecret.base32;
+  if(userToken){
+    var verified = speakeasy.totp.verify({ secret: parsedSecret,
+      encoding: 'base32',
+      token: userToken });
+  } else {
+    parsedSecret = ""
+  }
+
   const user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    role: "client",
+    twoFactorSecret: parsedSecret
   });
 
   User.findOne({ email: req.body.email }, (err, existingUser) => {
@@ -103,11 +144,20 @@ exports.postSignup = (req, res, next) => {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
       return res.redirect('/signup');
     }
+    if(userToken) {
+      if(!verified) {
+        req.flash('errors', { msg: 'Error durig QRcode verification.' });
+        return res.redirect('/signup');
+      }
+    }
     user.save((err) => {
       if (err) { return next(err); }
       req.logIn(user, (err) => {
         if (err) {
           return next(err);
+        }
+        if(verified) {
+          req.flash('success', { msg: 'Success! You are using two factor authentication.' });
         }
         res.redirect('/');
       });
