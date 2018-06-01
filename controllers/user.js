@@ -60,7 +60,7 @@ exports.postLogin = (req, res, next) => {
 
     req.logIn(user, (err) => {
       if (err) { return next(err); }
-      if (user.twoFactorSecret == "") { req.flash('warning', { msg: 'Warning! Maybe use two factor authentication?.' }); }
+      if (user.twoFactorSecret == "") { req.flash('success', { msg: 'Warning! Maybe use two factor authentication?.' }); }
       req.flash('success', { msg: 'Success! You are logged in.' });
       res.redirect(req.session.returnTo || '/');
     });

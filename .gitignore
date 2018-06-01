@@ -1,3 +1,5 @@
+mongo-docker-compose/data/
+
 lib-cov
 *.seed
 *.log
