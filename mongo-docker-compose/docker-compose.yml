@@ -1,4 +1,8 @@
 version: "2"
+networks:
+  proxy:
+    external:
+      name: common_proxy
 services:
 
   mongors1n1:
@@ -10,7 +14,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongors1n1:/data/db
-
+    networks:
+     - proxy
   mongors1n2:
     container_name: mongors1n2
     image: mongo:3.0.14
@@ -20,6 +25,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongors1n2:/data/db
+    networks:
+     - proxy
 
   mongors1n3:
     container_name: mongors1n3
@@ -30,6 +37,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongors1n3:/data/db
+    networks:
+     - proxy
 
   mongors2n1:
     container_name: mongors2n1
@@ -40,6 +49,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongors2n1:/data/db
+    networks:
+     - proxy
 
   mongors2n2:
     container_name: mongors2n2
@@ -50,6 +61,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongors2n2:/data/db
+    networks:
+     - proxy
 
   mongors2n3:
     container_name: mongors2n3
@@ -60,6 +73,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongors2n3:/data/db
+    networks:
+     - proxy
 
   mongocfg1:
     container_name: mongocfg1
@@ -72,6 +87,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongocfg1:/data/db
+    networks:
+     - proxy
 
   mongocfg2:
     container_name: mongocfg2
@@ -84,6 +101,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongocfg2:/data/db
+    networks:
+     - proxy
 
   mongocfg3:
     container_name: mongocfg3
@@ -96,6 +115,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DATA_DIR}/mongocfg3:/data/db
+    networks:
+     - proxy
 
   mongos1:
     container_name: mongos1
@@ -109,6 +130,8 @@ services:
       - 27017:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
+    networks:
+     - proxy
 
   mongos2:
     container_name: mongos2
@@ -122,4 +145,5 @@ services:
       - 27018:27017
     volumes:
       - /etc/localtime:/etc/localtime:ro
-
+    networks:
+     - proxy
