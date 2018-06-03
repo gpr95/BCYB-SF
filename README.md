@@ -1,19 +1,36 @@
-Hackathon Starter 
-=======================
+Web application for financial system - security project
+=======================================================
 
-A boilerplate for **Node.js** web applications.
-
-If you have attended any hackathons in the past, then you know how much time it takes to
-get a project started: decide on what to build, pick a programming language, pick a web framework,
-pick a CSS framework. A while later, you might have an initial project up on GitHub and only then
-can other team members start contributing. Or how about doing something as simple as *Sign in with Facebook*
-authentication? You can spend hours on it if you are not familiar with how OAuth 2.0 works.
-
-When I started this project, my primary focus was on **simplicity** and **ease of use**.
-I also tried to make it as **generic** and **reusable** as possible to cover most use cases of hackathon web apps,
-without being too specific. In the worst case you can use this as a learning guide for your projects,
-if for example you are only interested in **Sign in with Google** authentication and nothing else.
-
+# Running:
 '''
-docker-compose up &
-'''
+cd mongo-docker-compose
+docker-compose up
+./initiate
+cd ..
+docker-compose up
+
+This will pull all the images from [Docker index](https://index.docker.io/u/jacksoncage/mongo/) and run all the containers.
+'''  
+### Install Docker
+
+    sudo apt-get install -y apparmor lxc cgroup-lite curl
+    wget -qO- https://get.docker.com/ | sh
+    sudo usermod -aG docker YourUserNameHere
+    sudo service docker restart
+
+### Install Docker-compose (1.4.2+)
+
+    sudo su
+    curl -L https://github.com/docker/compose/releases/download/1.4.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    exit
+
+## Built upon
+ - [Docker-compose wait to start](http://brunorocha.org/python/dealing-with-linked-containers-dependency-in-docker-compose.html)
+ - [Bi directional docker commuication](http://abdelrahmanhosny.com/2015/07/01/3-solutions-to-bi-directional-linking-problem-in-docker-compose/)
+ - [MongoDB Sharded Cluster by Sebastian Voss](https://github.com/sebastianvoss/docker)
+ - [MongoDB](http://www.mongodb.org/)
+ - [Mongo Docker ](https://github.com/jacksoncage/mongo-docker)
+ - [DnsDock](https://github.com/tonistiigi/dnsdock)
+ - [Docker](https://github.com/dotcloud/docker/)
+ - A boilerplate for **Node.js** web applications.
