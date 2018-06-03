@@ -9,6 +9,10 @@ Web application for financial system - security project
     docker-compose up
 
 This will pull all the images from [Docker index](https://index.docker.io/u/jacksoncage/mongo/) and run all the containers.
+Also it will connect application with this mongodb cluster, run nginx image above aplication (running localhost:8080, nginx is running
+on localhost:80). Nginx is integrated with modsecurity which behave as WAF.
+
+    Browse: localhost:80
 
 ### Install Docker
 
