@@ -2,15 +2,14 @@ Web application for financial system - security project
 =======================================================
 
 # Running:
-'''
-cd mongo-docker-compose
-docker-compose up
-./initiate
-cd ..
-docker-compose up
+    cd mongo-docker-compose
+    docker-compose up
+    ./initiate
+    cd ..
+    docker-compose up
 
 This will pull all the images from [Docker index](https://index.docker.io/u/jacksoncage/mongo/) and run all the containers.
-'''  
+
 ### Install Docker
 
     sudo apt-get install -y apparmor lxc cgroup-lite curl
